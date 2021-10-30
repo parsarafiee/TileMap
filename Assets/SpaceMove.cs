@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class SpaceMove : MonoBehaviour
 {
+    public GameObject ball;
 
     public Rigidbody2D rb;
+    public Transform headOfSpaceShip;
     public float speedForward;
     public float speedSide;
     public BoxCollider2D landingCollider;
@@ -48,6 +50,10 @@ public class SpaceMove : MonoBehaviour
 
             rb.AddTorque(speedSide, ForceMode2D.Force);
         }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Fire();
+        }
 
     }
     // Update is called once per frame
@@ -60,14 +66,14 @@ public class SpaceMove : MonoBehaviour
             Debug.Log(angle);
             if (angle > -angleToLand && angle < angleToLand && landSpeed  < landingSpeedDesire)
             {
-                Debug.Log("you Won");
+                //Debug.Log("you Won");
                 landed = false;
                 landSpeed = 0;
 
             }
             else
             {
-                Debug.Log("lose");
+              //  Debug.Log("lose");
                 landed = false;
                 landSpeed = 0;
             }
@@ -75,10 +81,19 @@ public class SpaceMove : MonoBehaviour
 
     }
 
+
+    void Fire()
+    {
+        RaycastHit2D raycast = Physics2D.Raycast(headOfSpaceShip.position, headOfSpaceShip.transform.up);
+        //Debug.DrawLine(headOfSpaceShip.position, raycast.point);
+        GameObject b = Instantiate(ball, raycast.point, Quaternion.identity);
+        //float reyDistance = Vector3.Distance(headOfSpaceShip.position, raycast.point);
+        //Debug.Log(reyDistance);
+    }
     private void OnCollisionEnter2D(Collision2D collision)
     {
         landSpeed = collision.relativeVelocity.y;
-        Debug.Log(landSpeed);
+      ///  Debug.Log(landSpeed);
         if (collision.otherCollider == landingCollider)
         {
             landed = true;
