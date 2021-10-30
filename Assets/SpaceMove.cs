@@ -84,8 +84,10 @@ public class SpaceMove : MonoBehaviour
 
     void Fire()
     {
+        Debug.Log(headOfSpaceShip.transform.up);
         RaycastHit2D raycast = Physics2D.Raycast(headOfSpaceShip.position, headOfSpaceShip.transform.up);
         //Debug.DrawLine(headOfSpaceShip.position, raycast.point);
+        Debug.Log(raycast.collider.name);
         GameObject b = Instantiate(ball, raycast.point, Quaternion.identity);
         //float reyDistance = Vector3.Distance(headOfSpaceShip.position, raycast.point);
         //Debug.Log(reyDistance);
