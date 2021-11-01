@@ -12,11 +12,19 @@ public class SpaceMove : MonoBehaviour
     public float speedSide;
     public BoxCollider2D landingCollider;
 
+    public GameObject moveSpriteFire;
+
     public float angleToLand;
     public float landingSpeedDesire = 0.3f;
 
+    public Vector2 accelerationscale;
+
     float landSpeed;
     bool landed = false;
+    bool acceleratin;
+    float accelerationTime=0;
+    float maxTime = 3;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,8 +39,16 @@ public class SpaceMove : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.W))
         {
+            acceleratin = true; 
 
             rb.AddForce(this.transform.up * speedForward * Time.deltaTime, ForceMode2D.Force);
+        }
+        else 
+        {
+            acceleratin = false;
+            //moveSpriteFire.SetActive(false);
+            //moveSpriteFire.transform.localScale = new Vector3(1, 1, 1);
+            //accelerationTime = 0;
         }
         if (Input.GetKey(KeyCode.S))
         {
@@ -59,6 +75,32 @@ public class SpaceMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if (acceleratin)
+        {
+            accelerationTime += Time.deltaTime/ maxTime;
+            float fireSpriteY = Mathf.Lerp(accelerationscale.x, accelerationscale.y, accelerationTime);
+            moveSpriteFire.SetActive(true);
+            Debug.Log(accelerationTime);
+            moveSpriteFire.transform.localScale = new Vector3(0.5f,1 * fireSpriteY / 2, 1);
+
+            if (accelerationTime > 1)
+            {
+                accelerationTime = 1;
+            }
+        }
+        if (!acceleratin)
+        {
+            accelerationTime -= Time.deltaTime;
+            float fireSpriteY = Mathf.Lerp(accelerationscale.x, accelerationscale.y, accelerationTime);
+            moveSpriteFire.SetActive(true);
+            Debug.Log(accelerationTime);
+            moveSpriteFire.transform.localScale = new Vector3(0.5f, 1 * fireSpriteY / 2, 1);
+            if (accelerationTime <0)
+            {
+                accelerationTime = 0;
+            }
+        }
 
         if (landed)
         {
